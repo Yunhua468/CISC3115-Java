@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Queue;
+import java.util.LinkedList;
 
 class TreeNode {
 	int element;
@@ -19,13 +21,33 @@ public class BST {
 		this.root = root;
 	}
 	
-	public void inorder(TreeNode node, int depth) {
+	public void bfs(TreeNode node) {
+        if (node == null) return;
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(node);
+
+        while (!queue.isEmpty()) {
+            TreeNode current = queue.poll();   // remove front node
+            sharedlist.add(current.element);   // visit node
+            System.out.println(current.element);
+
+            if (current.left != null) {
+                queue.add(current.left);
+            }
+
+            if (current.right != null) {
+                queue.add(current.right);
+            }
+        }
+    }
+	
+	public void inorder(TreeNode node) {
 		if (node==null) return;
 		
-		System.out.println("  ".repeat(depth) + "Go left from " + node.element);
-		inorder(node.left, depth+1);             // visit left subtree
-		sharedlist.add(node.element);            // visit current node
-		inorder(node.right, depth+1);            // visit right subtree
+		inorder(node.left);             // visit left subtree
+		sharedlist.add(node.element);   // visit current node
+		inorder(node.right);            // visit right subtree
 	}
 	
 	public void preorder(TreeNode node) {
@@ -62,7 +84,7 @@ public class BST {
 
         // In-order
         sharedlist.clear();
-        bst.inorder(bst.root, 0);
+        bst.inorder(bst.root);
         System.out.print("Inorder: ");
         bst.printTraversal();
 
@@ -76,6 +98,12 @@ public class BST {
         sharedlist.clear();
         bst.postorder(bst.root);
         System.out.print("Postorder: ");
+        bst.printTraversal();
+        
+        // bfs
+        sharedlist.clear();
+        bst.bfs(bst.root);
+        System.out.print("BFS: ");
         bst.printTraversal();
     }
 	
